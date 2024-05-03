@@ -21,32 +21,30 @@ func create_req() Request {
 }
 
 func exec_req(req Request) {
-	time.Sleep(1*time.Second)
 	fmt.Printf("req %d\n", req.id)
+	time.Sleep(time.Millisecond*500)
 }
 
-func worker() {
-	for {
-		req := <- req_ch
-		exec_req(req)	
-		time.Sleep(2*time.Second)
-		fmt.Println("Recebendo novas requisições...")
-	}
-}
+
 
 func main() {
-	for i:=0; i<maxCapacity; i++ {	
 		go func() {
-			for {
-				req := create_req() 
-				select {
-				case req_ch <- req:
-				default:
-				}
-			}
-		}()
-		go worker()
+			for req := range req_ch {
+				exec_req(req)
+			} 
+						
+	}()
+
+	for {
+		if len(req_ch) < maxCapacity {
+			req := create_req()
+			req_ch <- req
+		} else {
+			time.Sleep(1*time.Second)
+			fmt.Println("O buffer alcançou a capacidade maxima...")
+		}
+
 	}
-	select{} 
+	
 
 }
