@@ -9,30 +9,30 @@ import (
 	"fmt"
 	"time"
 	"math/rand"
-	"sync"
 
 )
 
-func rotina() {
-	fmt.Printf("Eu sou uma Go Rotina e estou dormindo!\n")
+func rotina(id int, done chan bool) {
+	sleep_duration := time.Duration(rand.Intn(5))*time.Second
+	fmt.Printf("Eu sou a Go Rotina %d e estou dormindo!\n", id)
+	time.Sleep(sleep_duration)
+	fmt.Printf("Eu sou a Go Rotina %d e acordei!\n", id)
+	done <- true //envia um sinal para a main-goroutine
 }
 
 func main() {
-	var wg sync.WaitGroup
 	n := 5
+	done := make(chan bool)
 	
+	// cria n goroutines
 	for i:=0; i < n; i++ {
-		wg.Add(1) // adiciona uma goroutine ao grupo
-		go func(id int) {
-			defer wg.Done() // remove uma goroutine do grupo
-			// cria goroutine filha
-			fmt.Printf("ID: %d - ", id)
-			go rotina()
-			time.Sleep(time.Duration(rand.Intn(5))*time.Second)
-			fmt.Printf("ID: %d - Acordei!\n", id)
-		}(i)
+		go rotina(i, done)
 	}
 
-	wg.Wait() // espera todas as goroutines terminarem
+	// espera todas as goroutines terminarem 
+	for i:=0; i < n; i++ {
+		<-done
+	}
+
 	fmt.Println("Todas as Go Routines terminaram.\nValor de n é:", n)
 }
