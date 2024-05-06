@@ -11,7 +11,7 @@ func main() {
 	ch2 := make(chan int)
 
 	go xpto(ch1, 42)
-	go xpto(ch2, 43)
+	go xpto(ch1, 43)
 
 	select {
 	case v1 := <- ch1: 
