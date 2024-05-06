@@ -29,6 +29,7 @@ func main() {
 			fmt.Printf("ID: %d - ", id)
 			go rotina()
 			time.Sleep(time.Duration(rand.Intn(5))*time.Second)
+			fmt.Printf("ID: %d - Acordei!\n", id)
 		}(i)
 	}
 
