@@ -21,7 +21,8 @@ func rotina(id int, done chan bool) {
 }
 
 func main() {
-	n := 5
+	rand.Seed(time.Now().UnixNano())  // seed para gerar numeros aleatorios
+	n := rand.Intn(100)
 	done := make(chan bool)
 	
 	// cria n goroutines
