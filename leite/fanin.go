@@ -1,3 +1,28 @@
+// Considere a API abaixo como uma função que retorna 
+//um canal no qual um número indeterminado de strings serão enviadas.
+
+// func request_stream() chan string
+
+// considere que em um programa, dois canais destes estão sendo manipulados
+// da seguinte forma:
+
+// func main() {
+// ch1 := request_stream()
+// ch2 := request_stream()
+// }
+
+// considere que você deve incluir na sua função main uma chamada para a função:
+
+// func ingest(in chan string)
+
+// que deve ser chamada como uma nova goroutine, ou seja:
+
+// go ingest
+
+// agora, o canal recebido pela função ingest deve conter itens disponibilizados 
+//pelos canais ch1 e ch2 na medida em que estiverem disponíveis. 
+//Ou seja, tão logo itens de ch1 e ch2 estejam disponíveis, estes podem ser enviados para o canal a ser passado.
+
 package main
 
 import (
@@ -58,6 +83,6 @@ func main() {
 		}
 
 	}()
-	select {} 
+	select {} // o select {} é uma forma de manter a go routine rodando para sempre 
 
 }
