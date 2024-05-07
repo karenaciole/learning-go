@@ -7,20 +7,20 @@ import (
 )
 
 
-func sendNumber(ch chan int, n int) {
+func sendNumber(ch chan int) {
 	rand.Seed(time.Now().UnixNano())
-	n = rand.Intn(100)
+	n := rand.Intn(100)
 	// adicionar um time.sleep pode mudar a ordem do select
 	ch <- n
 }
 
-func sendString(ch chan string, s string) {
+func sendString(ch chan string) {
 	rand.Seed(time.Now().UnixNano())
 	chanCharset := make([]byte, 10)
 	for i := range chanCharset {
 		chanCharset[i] = byte(65 + rand.Intn(25))
 	}
-	s = string(chanCharset)
+	s := string(chanCharset)
 	// adicionar um time.sleep pode mudar a ordem do select
 	ch <- s
 }
@@ -29,8 +29,8 @@ func main() {
 	chNumber := make(chan int)
 	chString := make(chan string)
 
-	go sendNumber(chNumber, 10)
-	go sendString(chString, "Golang supremacy")
+	go sendNumber(chNumber)
+	go sendString(chString)
 	
 	select {
 		// the select is a non deterministic statement
