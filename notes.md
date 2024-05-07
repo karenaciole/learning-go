@@ -3,6 +3,7 @@
 Sumário
 1. [For Loop](#for-loop)
 2. [Channel](#Channel)
+3. [Select] (#Select)
 
 ## For Loop
 _Em Go, só existe For como estrutura de loop._ 
@@ -81,3 +82,71 @@ fatal error: all goroutines are asleep - deadlock!
 ```
 Isso acontece porque o canal só aceita um dado, e quando tentamos enviar o segundo, ele trava.
 
+## Select
+_O Select bloqueia até que um dos seus casos possa ser executado, então ele executa esse caso._
+
+_Ele escolhe um case aleatoriamente se vários estiverem prontos._
+
+```
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	tick := time.Tick(100 * time.Millisecond)
+	boom := time.After(500 * time.Millisecond)
+	for {
+		select {
+		case <-tick:
+			fmt.Println("tick.")
+		case <-boom:
+			fmt.Println("BOOM!")
+			return
+		default:
+			fmt.Println("    .")
+			time.Sleep(50 * time.Millisecond)
+		}
+	}
+}
+```
+Saída: 
+```
+
+
+    .
+    .
+tick.
+    .
+    .
+tick.
+    .
+    .
+tick.
+    .
+    .
+tick.
+    .
+    .
+tick.
+BOOM!
+```
+example from https://go.dev/tour/concurrency/6
+
+ 
+_Se um ou mais dos casos de comunicação puderem prosseguir, um único que puder prosseguir é escolhido por meio de uma seleção pseudoaleatória uniforme._
+
+_Se nenhum dos casos puder prosseguir, o Select bloqueia até que um dos casos possa prosseguir._
+
+Exemplo de código que isso ocorre: [select.go](/examples/select.go)
+
+Saída I: 
+```
+Received string: XLVAFUOVJE
+```
+Saída II se atraso a funcao sendString:
+```
+Received number: 85
+```
