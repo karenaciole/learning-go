@@ -1,8 +1,8 @@
 # Anotações
 
 Sumário
-1. [For Loop](##for-loop)
-2. [Channel](##Channel)
+1. [For Loop](#for-loop)
+2. [Channel](#Channel)
 
 ## For Loop
 _Em Go, só existe For como estrutura de loop._ 
