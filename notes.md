@@ -59,3 +59,25 @@ Saída:
 _Você pode usar quando precisa fazer alguma operação dentro do loop a cada X tempo_ 
 
 ## Channel
+- _Um canal nada mais é que um meio de comunicação entre goroutines. Podemos dizer também que ele atua como um buffer._ 
+
+- _Um canal pode receber e enviar dados. Ele pode ser bidirecional (recebe e envia dados) ou pode ser unidirecional._
+
+- _É possível declarar um canal de tamanho fixo, ou seja, ele só aceitará um número limitado de dados._
+```
+package main
+
+func main() {
+        ch := make(chan int, 1) // criando um canal de tamanho 1
+        ch <- 42 // enviando um dado para o canal
+        ch <- 27 
+        fmt.Println(<-ch) // recebendo um dado do canal
+
+}
+```
+Saída: 
+```	
+fatal error: all goroutines are asleep - deadlock!
+```
+Isso acontece porque o canal só aceita um dado, e quando tentamos enviar o segundo, ele trava.
+
